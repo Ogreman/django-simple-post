@@ -1,0 +1,17 @@
+{% block content %}
+
+{% for dressing in object_list %}
+    {% if forloop.first %}
+        <ul>
+    {% endif %}
+            <li>
+                <a href="{{ dressing.get_absolute_url }}">
+                    {{ dressing|title }}
+                </a>
+            </li>
+    {% if forloop.last %}
+        </ul>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

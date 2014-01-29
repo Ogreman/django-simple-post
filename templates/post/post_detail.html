@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ object|title }}{% endblock %}
+{% block content %}
+<div class="container">
+
+      <div class="jumbotron">
+        <h1>{{ object|title }}</h1>
+        <p class="text-warning">Posted by {{ object.author }} at {{ object.created }}</p>
+
+        <br>
+        <p>{{ object.content|linebreaks }}</p>
+        <br>
+        <p>
+        </p>
+      </div>
+
+      {% if replies %}
+          {% for post in replies %}
+          <div class="jumbotron">
+            <h1>{{ post|title }}</h1>
+            <p class="text-warning">Posted by {{ post.author }} at {{ post.created }}</p>
+            
+            <br>
+            <p>{{ post.content|linebreaks }}</p>
+            <br>
+            <p>
+            </p>
+          </div>
+          {% endfor %}
+      {% endif %}
+
+          <a class="btn btn-lg btn-primary" href="/" role="button">Return to list »</a>
+
+    </div>
+
+{% endblock %}
