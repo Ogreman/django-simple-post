@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 
-from vanilla import ListView, DetailView, CreateView, UpdateView
+from vanilla import ListView, DetailView, CreateView, UpdateView, RedirectView
 from braces.views import LoginRequiredMixin
 from core import views as core_views
 
@@ -101,3 +101,14 @@ class AuthoredView(ListView):
         return self.model.objects.filter(
             author__username=self.kwargs['author']
         ).are_active()
+
+
+class RootView(RedirectView):
+
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        post = get_object_or_404(models.Post, slug=self.kwargs['slug'])
+        while post.previous is not None:
+            post = post.previous
+        return post.get_absolute_url()

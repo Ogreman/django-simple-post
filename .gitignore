@@ -47,3 +47,5 @@ media/
 .sass-cache/
 
 db.*
+
+s.sh

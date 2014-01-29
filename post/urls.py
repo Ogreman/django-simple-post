@@ -29,6 +29,11 @@ urlpatterns = patterns('',
         name="reply",
     ),
     url(
+        regex=r'^(?P<slug>[\w-]+)/root/$',
+        view=views.RootView.as_view(),
+        name="root",
+    ),
+    url(
         regex=r'^tags/(?P<tag>[\w-]+)/$',
         view=views.PostTaggedView.as_view(),
         name="tagged_posts",

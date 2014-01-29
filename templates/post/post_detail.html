@@ -8,13 +8,15 @@
         <a href="{{ object.get_absolute_url }}">
           <h1>{{ object|title }}</h1>
         </a>
-        <p class="text-warning">Posted by <a href="{% url 'author' author=object.author %}">{{ post.author }}</a> at {{ object.created }}</p>
+        <p class="text-warning">Posted by <a href="{% url 'author' author=object.author %}">{{ post.author }}</a> at {{ object.created }} {% if post.previous %}(<a href="{% url 'root' slug=post.slug %}">root</a>){% endif %}</p>
 
         <br>
         <p>{{ object.content|linebreaks }}</p>
-        {% for tag in tags %}
+
+        {% for tag in tags %}{% if forloop.first %}tags: {% endif %}
         <a class="btn btn-xs btn-default" href="{% url 'tagged_posts' tag=tag %}" role="button">{{ tag }}</a>
         {% endfor %}
+
         <br>
         <p>
           <a class="btn btn-primary" href="{% url 'reply' reply=object.slug %}" role="button">Reply</a>
