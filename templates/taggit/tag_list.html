@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+
+
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Home</a></li>
+          {% if request.user.is_authenticated %}
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+        </ul>
+        <h3 class="text-muted">Forum Post Thing</h3>
+      </div>
+
+      <br>
+
+      <div class="jumbotron">
+          <h1>All Tags</h1>
+          <p class="lead">Click on a tag to list all tagged posts of that type.</p>
+          <p>
+          <a class="btn btn-lg btn-success" href="{% url 'new_post' %}" role="button">Create New Post</a>
+          <a class="btn btn-lg btn-success" href="/" role="button">View All Posts</a>
+          </p>
+      </div>
+
+    <div class="row marketing">
+    {% for tag in object_list %}
+        <div class="col-md-4">
+          <h4><a href="{% url 'tagged_posts' tag=tag %}">
+              {{ tag|title }}
+          </a></h4>
+        </div>
+    {% endfor %}
+    </div>
+
+{% endblock %}

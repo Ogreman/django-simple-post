@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from vanilla import ListView, DetailView, CreateView, UpdateView, RedirectView
 from braces.views import LoginRequiredMixin
 from core import views as core_views
+from taggit.models import Tag
 
 from . import models
 from . import forms
@@ -112,3 +113,8 @@ class RootView(RedirectView):
         while post.previous is not None:
             post = post.previous
         return post.get_absolute_url()
+
+
+class TagsListView(ListView):
+
+    model = Tag
