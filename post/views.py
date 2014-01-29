@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 
 from vanilla import ListView, DetailView, CreateView, UpdateView, RedirectView
 from braces.views import LoginRequiredMixin
 from core import views as core_views
 from taggit.models import Tag
+from registration.backends.simple.views import RegistrationView
 
 from . import models
 from . import forms
@@ -118,3 +119,11 @@ class RootView(RedirectView):
 class TagsListView(ListView):
 
     model = Tag
+
+
+class CustomRegistrationView(RegistrationView):
+
+    form_class = forms.RegisterForm
+
+    def get_success_url(self, request, user):
+        return reverse("home")

@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
+from post.views import CustomRegistrationView
+
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
@@ -10,14 +12,19 @@ urlpatterns = patterns('',
     url(r'^', include('post.urls')),
 
     url(
+        regex=r'^accounts/register/$',
+        view=CustomRegistrationView.as_view(),
+        name="register",
+    ),
+    url(
         regex=r'^accounts/login/$',
         view='django.contrib.auth.views.login',
-        name="login"
+        name="login",
     ),
     url(
         regex=r'^accounts/logout/$',
         view='django.contrib.auth.views.logout_then_login',
-        name="logout"
+        name="logout",
     ),
 )
 

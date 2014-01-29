@@ -1,5 +1,9 @@
 from django import forms
+
+from registration.forms import RegistrationForm
+
 from . import models
+
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -21,3 +25,11 @@ class PostForm(forms.ModelForm):
 class ReplyForm(PostForm):
     class Meta(PostForm.Meta):
         fields = ('content', 'tags', 'author')
+
+
+class RegisterForm(RegistrationForm):
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        for _, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['placeholder'] = _

@@ -48,10 +48,11 @@ STATICFILES_FINDERS = (
 
 THIRD_PARTY_APPS = (
     'braces',
+    'registration',
     'south',
     'taggit',
     'crispy_forms',
-    # 'debug_toolbar',
+    'debug_toolbar',
     'widget_tweaks',
 )
 

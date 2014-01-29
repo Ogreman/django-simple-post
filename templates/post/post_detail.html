@@ -12,6 +12,7 @@
 
         <br>
         <p>{{ object.content|linebreaks }}</p>
+        <br>
 
         {% for tag in tags %}{% if forloop.first %}<a href="{% url 'tags' %}">tags</a>: {% endif %}
         <a class="btn btn-xs btn-default" href="{% url 'tagged_posts' tag=tag %}" role="button">{{ tag }}</a>
