@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
+
 from vanilla import ListView, DetailView, CreateView, UpdateView
 from braces.views import LoginRequiredMixin
+from core import views as core_views
 
 from . import models 
 from . import forms
@@ -10,8 +12,11 @@ from . import forms
 class PostListView(ListView):
     model = models.Post
 
+    def get_queryset(self):
+        return self.model.objects.originals().are_active()
 
-class PostDetailView(DetailView):
+
+class PostDetailView(core_views.TagsContextMixin, DetailView):
     model = models.Post
     lookup_field = "slug"
 
@@ -23,15 +28,27 @@ class PostDetailView(DetailView):
         return context    
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
+    
     model = models.Post 
     success_url = reverse_lazy('home')
     form_class = forms.PostForm
 
+    def get_previous(self):
+        if not hasattr(self, "previous"):
+            self.previous = get_object_or_404(self.model, slug=self.kwargs['reply'])
+        return self.previous
+
+    def get_context_data(self, **kwargs):
+        context = super(PostCreateView, self).get_context_data(**kwargs)
+        if self.kwargs.get('reply', None):
+            context['previous'] = self.get_previous()
+        return context    
+
     def form_valid(self, form):
         if form.is_valid():
             if self.kwargs.get('reply', None):
-                form.instance.previous = self.model.objects.get(slug=self.kwargs['reply'])
+                form.instance.previous = self.get_previous()
                 form.save()
         return super(PostCreateView, self).form_valid(form)
 
