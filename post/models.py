@@ -9,6 +9,10 @@ class Post(Content):
 
     previous = models.ForeignKey("Post", blank=True, null=True)
     objects = managers.PostManager()
-    
+
     def get_absolute_url(self):
         return reverse("post", kwargs={"slug": self.slug})
+
+    @property
+    def replies(self):
+        return self.post_set.are_active().order_by('created')

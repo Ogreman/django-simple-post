@@ -1,0 +1,24 @@
+<div class="jumbotron" style="margin-left: {{ indent }}px">
+<a href="{{ post.get_absolute_url }}">
+<h1>{{ post|title }}</h1>
+</a>
+<p class="text-warning"><a href="{% url 'author' author=post.author %}">{{ post.author }}</a> replied to {{ post.previous }} at {{ post.created }}</p>
+
+<br>
+<p>{{ post.content|linebreaks }}</p>
+<br>
+<p>
+<a class="btn  btn-primary" href="{% url 'reply' reply=post.slug %}" role="button">Reply</a>
+{% if user == post.author %}
+    <a class="btn btn-primary" href="{% url 'edit' slug=post.slug %}" role="button">Edit</a>
+{% endif %}
+          <a class="btn btn-primary" href="/" role="button">Return to list »</a>
+
+</p>
+</div>
+
+{% for reply in post.replies %}
+  {% with indent=indent|add:"50" %}
+    {% include include_template with post=reply include_template=include_template indent=indent only %}
+  {% endwith %}
+{% endfor %}

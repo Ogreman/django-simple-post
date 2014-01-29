@@ -58,7 +58,7 @@ class Content(TimeStampedModel):
     active = models.BooleanField(
         "Active/visible content?",
         editable=True,
-        default=False
+        default=True
     )
     content = models.TextField(blank=True)
     objects = ContentManager()

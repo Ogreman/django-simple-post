@@ -5,7 +5,7 @@ from vanilla import ListView, DetailView, CreateView, UpdateView
 from braces.views import LoginRequiredMixin
 from core import views as core_views
 
-from . import models 
+from . import models
 from . import forms
 
 
@@ -24,15 +24,24 @@ class PostDetailView(core_views.TagsContextMixin, DetailView):
         context = super(PostDetailView, self).get_context_data(**kwargs)
         if self.object.previous:
             context['original'] = self.object.previous
-        context['replies'] = self.object.post_set.are_active()
-        return context    
+        context['replies'] = self.object.replies.select_related()
+        context['include_template'] = "post/includes/post_include.html"
+        return context
 
 
 class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
-    
-    model = models.Post 
-    success_url = reverse_lazy('home')
-    form_class = forms.PostForm
+
+    model = models.Post
+
+    def get_success_url(self):
+        if self.kwargs.get('reply', None):
+            return self.get_previous().get_absolute_url()
+        return self.object.get_absolute_url()
+
+    def get_form_class(self):
+        if self.kwargs.get('reply', None):
+            return forms.ReplyForm
+        return forms.PostForm
 
     def get_previous(self):
         if not hasattr(self, "previous"):
@@ -41,13 +50,22 @@ class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(PostCreateView, self).get_context_data(**kwargs)
+
         if self.kwargs.get('reply', None):
             context['previous'] = self.get_previous()
-        return context    
+        else:
+            context['title'] = "New Post"
+        return context
 
     def form_valid(self, form):
         if form.is_valid():
             if self.kwargs.get('reply', None):
+                form.instance.title = "re: {}{}".format(
+                    self.get_previous().title,
+                    " ({})".format(
+                        self.get_previous().replies.count()
+                    ) if self.get_previous().replies.count() else ""
+                )
                 form.instance.previous = self.get_previous()
                 form.save()
         return super(PostCreateView, self).form_valid(form)
@@ -55,4 +73,31 @@ class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = models.Post
-    success_url = reverse_lazy('home')    
+    lookup_field = "slug"
+    form_class = forms.PostForm
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdateView, self).get_context_data(**kwargs)
+        context['title'] = "Edit Post"
+        return context
+
+
+class PostTaggedView(ListView):
+    model = models.Post
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            tags__name=self.kwargs['tag']
+        ).are_active()
+
+
+class AuthoredView(ListView):
+    model = models.Post
+
+    def get_queryset(self):
+        return self.model.objects.filter(
+            author__username=self.kwargs['author']
+        ).are_active()

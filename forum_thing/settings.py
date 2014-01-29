@@ -50,7 +50,9 @@ THIRD_PARTY_APPS = (
     'braces',
     'south',
     'taggit',
-    'crispy_forms'
+    'crispy_forms',
+    # 'debug_toolbar',
+    'widget_tweaks',
 )
 
 LOCAL_APPS = (
@@ -67,6 +69,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 )
 
 ROOT_URLCONF = 'forum_thing.urls'
@@ -83,6 +86,7 @@ DATABASES = {
         'NAME': PROJECT_DIR.child('db.sqlite3'),
     }
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -102,3 +106,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+def custom_show_toolbar(request):
+    return True

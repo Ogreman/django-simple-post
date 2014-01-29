@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from . import views 
+from . import views
 
 urlpatterns = patterns('',
     url(
@@ -19,8 +19,23 @@ urlpatterns = patterns('',
         name="post",
     ),
     url(
+        regex=r'^(?P<slug>[\w-]+)/edit/$',
+        view=views.PostUpdateView.as_view(),
+        name="edit",
+    ),
+    url(
         regex=r'^(?P<reply>[\w-]+)/reply/$',
         view=views.PostCreateView.as_view(),
         name="reply",
+    ),
+    url(
+        regex=r'^tags/(?P<tag>[\w-]+)/$',
+        view=views.PostTaggedView.as_view(),
+        name="tagged_posts",
+    ),
+    url(
+        regex=r'^by/(?P<author>[\w-]+)/$',
+        view=views.AuthoredView.as_view(),
+        name="author",
     ),
 )

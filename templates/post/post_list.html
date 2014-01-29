@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+  <div class="container">
+
+
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="active"><a href="#">Home</a></li>
@@ -13,32 +15,27 @@
         </ul>
         <h3 class="text-muted">Forum Post Thing</h3>
       </div>
+
       <br>
+
       <div class="jumbotron">
-        <h1>All Posts</h1>
-        <p class="lead">Some posts will be found below. Eventually.</p>
-        <p>
-        <a class="btn btn-lg btn-success" href="{% url 'new_post' %}" role="button">Create New Post</a>
-        <a class="btn btn-lg btn-success" href="/" role="button">View All Posts</a>
-        </p>
+          <h1>All Posts</h1>
+          <p class="lead">Some posts will be found below. Eventually.</p>
+          <p>
+          <a class="btn btn-lg btn-success" href="{% url 'new_post' %}" role="button">Create New Post</a>
+          <a class="btn btn-lg btn-success" href="/" role="button">View All Posts</a>
+          </p>
       </div>
 
-      <div class="row marketing">
-
+    <div class="row marketing">
     {% for post in object_list %}
-      {% if forloop.first %}
         <div class="col-lg">
-      {% endif %}
           <h4><a href="{{ post.get_absolute_url }}">
                     {{ post|title }}
                 </a></h4>
           <p>{{ post.content|linebreaks }}</p>
-          <br>
-      {% if forloop.last %}
         </div>
-      {% endif %}
     {% endfor %}
-
     </div>
 
 {% endblock %}

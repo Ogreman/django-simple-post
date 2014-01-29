@@ -1,39 +1,33 @@
 {% extends "base.html" %}
 {% block title %}{{ object|title }}{% endblock %}
 {% block content %}
-<div class="container">
+
+  <div class="container" style="margin: 0 auto;">
 
       <div class="jumbotron">
         <a href="{{ object.get_absolute_url }}">
           <h1>{{ object|title }}</h1>
         </a>
-        <p class="text-warning">Posted by {{ object.author }} at {{ object.created }}</p>
+        <p class="text-warning">Posted by <a href="{% url 'author' author=object.author %}">{{ post.author }}</a> at {{ object.created }}</p>
 
         <br>
         <p>{{ object.content|linebreaks }}</p>
+        {% for tag in tags %}
+        <a class="btn btn-xs btn-default" href="{% url 'tagged_posts' tag=tag %}" role="button">{{ tag }}</a>
+        {% endfor %}
         <br>
         <p>
           <a class="btn btn-primary" href="{% url 'reply' reply=object.slug %}" role="button">Reply</a>
+          {% if request.user == object.author %}
+          <a class="btn btn-primary" href="{% url 'edit' slug=object.slug %}" role="button">Edit</a>
+          {% endif %}
+          <a class="btn btn-primary" href="/" role="button">Return to list »</a>
         </p>
       </div>
 
-      {% if replies %}
-          {% for post in replies %}
-          <div class="jumbotron">
-            <a href="{{ post.get_absolute_url }}">
-              <h1>{{ post|title }}</h1>
-            </a>
-            <p class="text-warning">{{ post.author }} replied to {{ post.previous }} at {{ post.created }}</p>
-            
-            <br>
-            <p>{{ post.content|linebreaks }}</p>
-            <br>
-            <p>
-              <a class="btn  btn-primary" href="{% url 'reply' reply=post.slug %}" role="button">Reply</a>
-            </p>
-          </div>
-          {% endfor %}
-      {% endif %}
+        {% for reply in replies %}
+          {% include include_template with user=request.user post=reply include_template=include_template indent=50 only %}
+        {% endfor %}
 
         <p>
             <a class="btn btn-lg btn-primary" href="/" role="button">Return to list »</a>

@@ -17,3 +17,7 @@ class PostForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
         self.fields['tags'].widget.attrs['placeholder'] = "Enter a list of tags (e.g.: 'foo, bar')..."
 
+
+class ReplyForm(PostForm):
+    class Meta(PostForm.Meta):
+        fields = ('content', 'tags', 'author')

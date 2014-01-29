@@ -4,9 +4,11 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^admin/', include(admin.site.urls)),
+
+
     url(r'^', include('post.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
     url(
         regex=r'^accounts/login/$',
         view='django.contrib.auth.views.login',
