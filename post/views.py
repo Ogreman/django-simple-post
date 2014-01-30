@@ -11,11 +11,12 @@ from . import models
 from . import forms
 
 
-class PostListView(ListView):
+class PostListView(core_views.TermSearchMixin, ListView):
     model = models.Post
 
     def get_queryset(self):
-        return self.model.objects.originals().are_active()
+        queryset = super(PostListView, self).get_queryset()
+        return queryset.originals().are_active()
 
 
 class PostDetailView(core_views.TagsContextMixin, DetailView):
@@ -52,7 +53,6 @@ class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(PostCreateView, self).get_context_data(**kwargs)
-
         if self.kwargs.get('reply', None):
             context['previous'] = self.get_previous()
         else:

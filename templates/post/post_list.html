@@ -22,6 +22,7 @@
       <div class="jumbotron">
           <h1>All Posts</h1>
           <p class="lead">Some posts will be found below. Eventually.</p>
+          {% include "core/includes/search.html" %}
           <p>
           <a class="btn btn-lg btn-success" href="{% url 'new_post' %}" role="button">Create New Post</a>
           <a class="btn btn-lg btn-success" href="/" role="button">View All Posts</a>
