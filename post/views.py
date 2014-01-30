@@ -13,6 +13,10 @@ from . import forms
 
 class PostListView(core_views.TermSearchMixin, ListView):
     model = models.Post
+    term_mapping = {
+        "title": "icontains",
+        "tags__name": "iexact",
+    }
 
     def get_queryset(self):
         queryset = super(PostListView, self).get_queryset()
