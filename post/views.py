@@ -91,22 +91,22 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class PostTaggedView(ListView):
-    model = models.Post
+class PostTaggedView(PostListView):
 
     def get_queryset(self):
-        return self.model.objects.filter(
+        queryset = super(PostTaggedView, self).get_queryset()
+        return queryset.filter(
             tags__name=self.kwargs['tag']
-        ).are_active()
+        ).distinct()
 
 
-class AuthoredView(ListView):
-    model = models.Post
+class AuthoredView(PostListView):
 
     def get_queryset(self):
-        return self.model.objects.filter(
+        queryset = super(AuthoredView, self).get_queryset()
+        return queryset.filter(
             author__username=self.kwargs['author']
-        ).are_active()
+        )
 
 
 class RootView(RedirectView):

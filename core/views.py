@@ -149,9 +149,6 @@ class TermSearchMixin(object):
         }
     """
 
-    term = "title"
-    lookup = "icontains"
-
     def get_queryset(self):
         queryset = super(TermSearchMixin, self).get_queryset()
         q = self.request.GET.get("q")
