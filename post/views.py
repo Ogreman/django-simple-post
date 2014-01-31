@@ -25,8 +25,9 @@ class PostListView(
     context_lead = "Some posts will be found below. Eventually."
 
     def get_queryset(self):
-        queryset = super(PostListView, self).get_queryset()
-        return queryset.originals().are_active()
+        return super(
+            PostListView, self
+        ).get_queryset().originals().are_active()
 
 
 class PostDetailView(core_views.TagsContextMixin, DetailView):

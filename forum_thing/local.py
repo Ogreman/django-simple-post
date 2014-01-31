@@ -25,6 +25,11 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+ALLOWED_HOSTS = []
+
+LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+LOGOUT_URL = reverse_lazy('logout')
 
 # Application definition
 DEFAULT_APPS = (
@@ -72,16 +77,15 @@ ROOT_URLCONF = 'forum_thing.urls'
 
 WSGI_APPLICATION = 'forum_thing.wsgi.application'
 
-LOGIN_URL = reverse_lazy('login')
-LOGIN_REDIRECT_URL = reverse_lazy('home')
-LOGOUT_URL = reverse_lazy('logout')
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-import dj_database_url
 
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': PROJECT_DIR.child('db.sqlite3'),
+    }
 }
 
 
@@ -106,9 +110,3 @@ STATIC_URL = '/static/'
 
 def custom_show_toolbar(request):
     return True
-
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
