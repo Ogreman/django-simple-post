@@ -29,8 +29,6 @@ class PostDetailView(core_views.TagsContextMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PostDetailView, self).get_context_data(**kwargs)
-        if self.object.previous:
-            context['original'] = self.object.previous
         context['replies'] = self.object.replies.select_related()
         context['include_template'] = "post/includes/post_include.html"
         return context
