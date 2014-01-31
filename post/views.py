@@ -27,7 +27,7 @@ class PostListView(
     def get_queryset(self):
         return super(
             PostListView, self
-        ).get_queryset().originals().are_active()
+        ).get_queryset().originals()
 
 
 class PostDetailView(core_views.TagsContextMixin, DetailView):
@@ -39,6 +39,21 @@ class PostDetailView(core_views.TagsContextMixin, DetailView):
         context['replies'] = self.object.replies.select_related()
         context['include_template'] = "post/includes/post_include.html"
         return context
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        slug = self.kwargs[self.lookup_field]
+        if self.request.user.is_authenticated():
+            if self.request.user.is_staff:
+                return get_object_or_404(
+                    queryset,
+                    slug=slug
+                )
+        return get_object_or_404(
+            queryset,
+            slug=slug,
+            active=True
+        )
 
 
 class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
@@ -125,8 +140,7 @@ class AuthoredView(PostListView):
         return context
 
     def get_queryset(self):
-        queryset = super(AuthoredView, self).get_queryset()
-        return queryset.filter(
+        return self.model.objects.filter(
             author__username=self.kwargs['author']
         )
 
@@ -153,3 +167,14 @@ class CustomRegistrationView(RegistrationView):
 
     def get_success_url(self, request, user):
         return reverse("home")
+
+
+class PostHideView(RedirectView):
+
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        post = get_object_or_404(models.Post, slug=self.kwargs['slug'])
+        post.active = False
+        post.save()
+        return post.get_absolute_url()

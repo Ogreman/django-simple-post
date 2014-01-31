@@ -12,18 +12,13 @@
 <a class="btn btn-xs btn-default" href="{% url 'tagged_posts' tag=tag %}" role="button">{{ tag }}</a>
 {% endfor %}
 
-<p>
-<a class="btn  btn-primary" href="{% url 'reply' reply=post.slug %}" role="button">Reply</a>
-{% if user == post.author %}
-    <a class="btn btn-primary" href="{% url 'edit' slug=post.slug %}" role="button">Edit</a>
-{% endif %}
-<a class="btn btn-primary" href="/" role="button">Return to list »</a>
-
-</p>
+{% include "post/includes/tools.html" with object=post user=user %}
 </div>
 
 {% for reply in post.replies %}
+{% if request.user.is_staff or reply.active %}
   {% with indent=indent|add:"50" %}
-    {% include include_template with post=reply include_template=include_template indent=indent only %}
+    {% include include_template with post=reply include_template=include_template indent=indent user=user only %}
   {% endwith %}
+{% endif %}
 {% endfor %}

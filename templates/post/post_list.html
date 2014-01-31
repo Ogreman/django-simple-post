@@ -19,12 +19,14 @@
 
     <div class="row marketing">
     {% for post in object_list %}
+      {% if request.user.is_staff or post.active %}
         <div class="col-lg">
           <h4><a href="{{ post.get_absolute_url }}">
-                    {{ post|title }}
-                </a></h4>
+              {% if not post.active %}<del>{% endif %}{{ post|title }}{% if not post.active %}</del>{% endif %}
+          </a></h4>
           <p>{{ post.content|linebreaks }}</p>
         </div>
+        {% endif %}
     {% endfor %}
     </div>
 

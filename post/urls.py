@@ -19,6 +19,16 @@ urlpatterns = patterns('',
         name="edit",
     ),
     url(
+        regex=r'^(?P<slug>[\w-]+)/hide/$',
+        view=views.PostHideView.as_view(),
+        name="hide",
+    ),
+    url(
+        regex=r'^(?P<slug>[\w-]+)/reveal/$',
+        view=views.PostHideView.as_view(),
+        name="reveal",
+    ),
+    url(
         regex=r'^(?P<reply>[\w-]+)/reply/$',
         view=views.PostCreateView.as_view(),
         name="reply",

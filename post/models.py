@@ -16,4 +16,4 @@ class Post(Content):
 
     @property
     def replies(self):
-        return self.post_set.are_active().order_by('created')
+        return self.post_set.order_by('created')

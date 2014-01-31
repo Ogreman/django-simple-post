@@ -19,17 +19,14 @@
         {% endfor %}
 
         <br>
-        <p>
-          <a class="btn btn-primary" href="{% url 'reply' reply=object.slug %}" role="button">Reply</a>
-          {% if request.user == object.author %}
-          <a class="btn btn-primary" href="{% url 'edit' slug=object.slug %}" role="button">Edit</a>
-          {% endif %}
-          <a class="btn btn-primary" href="/" role="button">Return to list »</a>
-        </p>
-      </div>
 
+        {% include "post/includes/tools.html" with object=object %}
+
+      </div>
         {% for reply in replies %}
-          {% include include_template with user=request.user post=reply include_template=include_template indent=50 only %}
+          {% if request.user.is_staff or reply.active %}
+            {% include include_template with user=request.user post=reply include_template=include_template indent=50 only %}
+          {% endif %}
         {% endfor %}
 
         <p>
