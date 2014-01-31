@@ -5,6 +5,7 @@ from core.models import Content
 
 from . import managers
 
+
 class Post(Content):
 
     previous = models.ForeignKey("Post", blank=True, null=True)

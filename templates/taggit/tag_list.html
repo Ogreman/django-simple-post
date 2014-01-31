@@ -3,19 +3,7 @@
 {% block content %}
   <div class="container">
 
-
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Home</a></li>
-          {% if request.user.is_authenticated %}
-          <li><a href="{% url 'logout' %}">Logout</a></li>
-          {% else %}
-          <li><a href="{% url 'register' %}">Register</a></li>
-          <li><a href="{% url 'login' %}">Login</a></li>
-          {% endif %}
-        </ul>
-        <h3 class="text-muted">Forum Post Thing</h3>
-      </div>
+    {% include "core/includes/header.html" %}
 
       <br>
 

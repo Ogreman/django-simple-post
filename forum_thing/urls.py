@@ -4,6 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from post.views import CustomRegistrationView
+from post.forms import LoginForm
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
@@ -20,6 +21,10 @@ urlpatterns = patterns('',
         regex=r'^accounts/login/$',
         view='django.contrib.auth.views.login',
         name="login",
+        kwargs={
+            'authentication_form': LoginForm,
+            'template_name': 'registration/login.html'
+        },
     ),
     url(
         regex=r'^accounts/logout/$',

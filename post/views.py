@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse_lazy, reverse
 
-from vanilla import ListView, DetailView, CreateView, UpdateView, RedirectView
+from vanilla import ListView, DetailView, CreateView, UpdateView, RedirectView, TemplateView
 from braces.views import LoginRequiredMixin
 from core import views as core_views
 from taggit.models import Tag
@@ -11,12 +11,18 @@ from . import models
 from . import forms
 
 
-class PostListView(core_views.TermSearchMixin, ListView):
+class PostListView(
+    core_views.ContextVariableMixin,
+    core_views.TermSearchMixin,
+    ListView
+):
     model = models.Post
     term_mapping = {
         "title": "icontains",
         "tags__name": "iexact",
     }
+    context_head = "All Posts"
+    context_lead = "Some posts will be found below. Eventually."
 
     def get_queryset(self):
         queryset = super(PostListView, self).get_queryset()
@@ -91,6 +97,15 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
 class PostTaggedView(PostListView):
 
+    def get_context_data(self, **kwargs):
+        context = super(PostTaggedView, self).get_context_data(**kwargs)
+        context['head'] = "Tagged Posts"
+        context['lead'] = "All posts tagged with {}. Happy hunting.".format(
+            self.kwargs['tag']
+        )
+        return context
+
+
     def get_queryset(self):
         queryset = super(PostTaggedView, self).get_queryset()
         return queryset.filter(
@@ -99,6 +114,14 @@ class PostTaggedView(PostListView):
 
 
 class AuthoredView(PostListView):
+
+    def get_context_data(self, **kwargs):
+        context = super(AuthoredView, self).get_context_data(**kwargs)
+        context['head'] = "Posts by {}".format(self.kwargs['author'])
+        context['lead'] = "All posts created by {}.".format(
+            self.kwargs['author']
+        )
+        return context
 
     def get_queryset(self):
         queryset = super(AuthoredView, self).get_queryset()

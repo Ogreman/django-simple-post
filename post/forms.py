@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 from registration.forms import RegistrationForm
 
@@ -33,3 +34,12 @@ class RegisterForm(RegistrationForm):
         for _, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['placeholder'] = _
+
+
+class LoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['placeholder'] = "username"
+        self.fields['username'].widget.attrs['class'] = "form-control"
+        self.fields['password'].widget.attrs['placeholder'] = "password"
+        self.fields['password'].widget.attrs['class'] = "form-control"
