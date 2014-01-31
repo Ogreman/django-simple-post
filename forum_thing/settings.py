@@ -47,7 +47,6 @@ THIRD_PARTY_APPS = (
     'south',
     'taggit',
     'crispy_forms',
-    'debug_toolbar',
     'widget_tweaks',
 )
 
