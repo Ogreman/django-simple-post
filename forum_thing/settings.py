@@ -83,6 +83,8 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
+SITE_URL = "http://post-thing.herokuapp.com"
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_USE_TLS = True

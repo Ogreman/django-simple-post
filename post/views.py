@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.conf import settings 
 
 from vanilla import ListView, DetailView, CreateView, UpdateView, RedirectView, TemplateView
 from braces.views import LoginRequiredMixin
@@ -68,13 +69,14 @@ class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
 
             Your post on Post-Thing received a reply from {other_user}! 
 
-            Please click <a href="{url}">here</a> to view the response.
+            Please click <a href="{site_url}/{url}">here</a> to view the response.
 
             Regards,
             The Team at Post-Thing. 
             """.format(
                 user=self.get_previous().author.username,
                 other_user=self.request.user.username,
+                site_url=settings.SITE_URL,
                 url=self.get_previous().get_absolute_url(),
             ),
             recipient=self.get_previous().author,

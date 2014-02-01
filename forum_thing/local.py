@@ -89,6 +89,7 @@ DATABASES = {
     }
 }
 
+SITE_URL = "127.0.0.0:8000"
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 #EMAIL_HOST = 'localhost'
 #EMAIL_PORT = '1025'
