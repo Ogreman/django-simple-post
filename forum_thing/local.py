@@ -49,6 +49,7 @@ STATICFILES_FINDERS = (
 THIRD_PARTY_APPS = (
     'braces',
     'registration',
+    'django_extensions',
     'south',
     'taggit',
     'crispy_forms',
@@ -88,6 +89,7 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

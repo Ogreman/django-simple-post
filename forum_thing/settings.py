@@ -83,6 +83,14 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'theogreman@gmail.com'
+EMAIL_HOST_PASSWORD = 'cwkxgjrfbphxxzaf'
+DEFAULT_FROM_EMAIL = 'notifications@post-thing.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
