@@ -60,6 +60,26 @@ class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
 
     model = models.Post
 
+    def create_reply(self):
+        models.Email.objects.create(
+            subject="Your post received a reply!",
+            content="""
+            Dear {user}, 
+
+            Your post on Post-Thing received a reply from {other_user}! 
+
+            Please click <a href="{url}">here</a> to view the response.
+
+            Regards,
+            The Team at Post-Thing. 
+            """.format(
+                user=self.get_previous().author.username,
+                other_user=self.request.user.username,
+                url=self.get_previous().get_absolute_url(),
+            ),
+            recipient=self.get_previous().author,
+        )
+
     def get_success_url(self):
         if self.kwargs.get('reply', None):
             return self.get_previous().get_absolute_url()
@@ -94,6 +114,7 @@ class PostCreateView(LoginRequiredMixin, core_views.AuthoredMixin, CreateView):
                 )
                 form.instance.previous = self.get_previous()
                 form.save()
+                self.create_reply()
         return super(PostCreateView, self).form_valid(form)
 
 
